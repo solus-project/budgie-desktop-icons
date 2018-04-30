@@ -2,6 +2,7 @@
 
 main_sources = [
     'desktop-manager.c',
+    'desktop-view.c',
     'desktop-window.c',
     'main.c',
 ]
