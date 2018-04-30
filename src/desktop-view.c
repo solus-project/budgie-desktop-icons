@@ -74,7 +74,15 @@ static void budgie_desktop_view_class_init(BudgieDesktopViewClass *klazz)
  */
 static void budgie_desktop_view_init(BudgieDesktopView *self)
 {
-        /* TODO: Stuff */
+        /* Protect against future GTK jankery */
+        gtk_event_box_set_visible_window(GTK_EVENT_BOX(self), FALSE);
+        gtk_event_box_set_above_child(GTK_EVENT_BOX(self), FALSE);
+
+        /* Force alignment */
+        gtk_widget_set_halign(GTK_WIDGET(self), GTK_ALIGN_FILL);
+        gtk_widget_set_valign(GTK_WIDGET(self), GTK_ALIGN_FILL);
+        gtk_widget_set_hexpand(GTK_WIDGET(self), TRUE);
+        gtk_widget_set_vexpand(GTK_WIDGET(self), TRUE);
 }
 
 /*

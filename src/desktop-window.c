@@ -13,6 +13,7 @@
 
 #include "util.h"
 
+#include "desktop-view.h"
 #include "desktop-window.h"
 
 #include <gtk/gtk.h>
@@ -27,6 +28,8 @@ struct _BudgieDesktopWindowClass {
  */
 struct _BudgieDesktopWindow {
         GtkApplicationWindow parent;
+
+        GtkWidget *view; /** Our main view */
 
         GdkMonitor *monitor; /** Our output */
         GdkDisplay *display; /** Our display */
@@ -175,6 +178,9 @@ static void budgie_desktop_window_init(BudgieDesktopWindow *self)
         gtk_window_set_skip_taskbar_hint(window, TRUE);
         gtk_window_set_type_hint(window, GDK_WINDOW_TYPE_HINT_DESKTOP);
         gtk_window_set_title(window, "Desktop Window");
+
+        self->view = budgie_desktop_view_new();
+        gtk_container_add(GTK_CONTAINER(self), self->view);
 
         /* We're an RGBA window */
         gtk_widget_set_app_paintable(GTK_WIDGET(self), TRUE);
