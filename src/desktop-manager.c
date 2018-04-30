@@ -33,6 +33,8 @@ struct _BudgieDesktopManager {
 
 G_DEFINE_TYPE(BudgieDesktopManager, budgie_desktop_manager, G_TYPE_OBJECT)
 
+static void budgie_desktop_manager_screens_changed(BudgieDesktopManager *self, GdkScreen *screen);
+
 /**
  * budgie_desktop_manager_new:
  *
@@ -76,6 +78,26 @@ static void budgie_desktop_manager_class_init(BudgieDesktopManagerClass *klazz)
  */
 static void budgie_desktop_manager_init(BudgieDesktopManager *self)
 {
+        GdkScreen *screen = NULL;
+
+        screen = gdk_screen_get_default();
+        g_signal_connect_swapped(screen,
+                                 "monitors-changed",
+                                 G_CALLBACK(budgie_desktop_manager_screens_changed),
+                                 self);
+
+        /* Fire off the initial change event now */
+        budgie_desktop_manager_screens_changed(self, screen);
+}
+
+/**
+ * budgie_desktop_manager_screens_changed:
+ *
+ * The screens changed, so let's go do something useful with them.
+ */
+static void budgie_desktop_manager_screens_changed(BudgieDesktopManager *self, GdkScreen *screen)
+{
+        g_message("Screens changed");
 }
 
 /*
