@@ -54,12 +54,12 @@ config_h = configure_file(
 )
 config_h_dir = include_directories('.')
 
-# Budgie needs a minimum 3.18 GNOME stack
-gnome_minimum_version = '>= 3.18.0'
+# Budgie Desktop Icons supersedes "working Nautilus" (3.28), so lets use new stack
+gnome_minimum_version = '>= 3.22.0'
 
 dep_gtk3 = dependency('gtk+-3.0', version: gnome_minimum_version)
-dep_glib = dependency('glib-2.0', version: '>= 2.46.0')
-dep_giounix = dependency('gio-unix-2.0', version: '>= 2.46.0')
+dep_glib = dependency('glib-2.0', version: '>= 2.56.0')
+dep_giounix = dependency('gio-unix-2.0', version: '>= 2.56.0')
 dep_gdkx11 = dependency('gdk-x11-3.0', version: gnome_minimum_version)
 
 # Now go build the source
