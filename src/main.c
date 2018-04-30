@@ -42,6 +42,7 @@ int main(int argc, char **argv)
         g_autoptr(GtkApplication) app = NULL;
 
         app = gtk_application_new(APP_ID, G_APPLICATION_FLAGS_NONE);
+        g_application_set_default(G_APPLICATION(app));
         g_signal_connect(app, "activate", G_CALLBACK(app_activate), NULL);
         g_signal_connect(app, "shutdown", G_CALLBACK(app_shutdown), NULL);
         return g_application_run(G_APPLICATION(app), argc, argv);
