@@ -29,6 +29,8 @@ struct _BudgieDesktopWindow {
         GtkApplicationWindow parent;
 
         GdkMonitor *monitor; /** Our output */
+        GdkDisplay *display; /** Our display */
+        GdkScreen *screen;   /** Our screen */
 };
 
 G_DEFINE_TYPE(BudgieDesktopWindow, budgie_desktop_window, GTK_TYPE_WINDOW)
@@ -107,15 +109,32 @@ static void budgie_desktop_window_constructed(GObject *obj)
 {
         BudgieDesktopWindow *self = NULL;
         GdkRectangle display_area = { 0 };
+        GdkVisual *rgba_visual = NULL;
 
+        /* Stash for later use */
         self = BUDGIE_DESKTOP_WINDOW(obj);
+        self->display = gdk_monitor_get_display(self->monitor);
+        /* GTK 3.22.x only has a single GdkScreen per display now */
+        self->screen = gdk_display_get_default_screen(self->display);
+
         g_message("New output on %s %s",
                   gdk_monitor_get_manufacturer(self->monitor),
                   gdk_monitor_get_model(self->monitor));
 
+        /* Resize to available geometry */
         gdk_monitor_get_geometry(self->monitor, &display_area);
         gtk_window_move(GTK_WINDOW(self), display_area.x, display_area.y);
         gtk_window_resize(GTK_WINDOW(self), display_area.width, display_area.height);
+
+        /* Adopt RGBA visual if possible */
+        rgba_visual = gdk_screen_get_rgba_visual(self->screen);
+        if (rgba_visual) {
+                gtk_widget_set_visual(GTK_WIDGET(self), rgba_visual);
+        } else {
+                g_warning("RGBA Compositing missing on display %s %s",
+                          gdk_monitor_get_manufacturer(self->monitor),
+                          gdk_monitor_get_model(self->monitor));
+        }
 
         G_OBJECT_CLASS(budgie_desktop_window_parent_class)->constructed(obj);
 }
@@ -156,6 +175,9 @@ static void budgie_desktop_window_init(BudgieDesktopWindow *self)
         gtk_window_set_skip_taskbar_hint(window, TRUE);
         gtk_window_set_type_hint(window, GDK_WINDOW_TYPE_HINT_DESKTOP);
         gtk_window_set_title(window, "Desktop Window");
+
+        /* We're an RGBA window */
+        gtk_widget_set_app_paintable(GTK_WIDGET(self), TRUE);
 }
 
 /*
