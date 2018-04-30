@@ -9,13 +9,22 @@
  * (at your option) any later version.
  */
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <gtk/gtk.h>
+
+#define APP_ID "org.budgie-desktop.icons"
+
+static void app_activate(GApplication *app, gpointer v)
+{
+        g_message("Activated..");
+}
 
 int main(int argc, char **argv)
 {
-        fputs("Not yet implemented\n", stderr);
-        return EXIT_FAILURE;
+        g_autoptr(GtkApplication) app = NULL;
+
+        app = gtk_application_new(APP_ID, G_APPLICATION_FLAGS_NONE);
+        g_signal_connect(app, "activate", G_CALLBACK(app_activate), NULL);
+        return g_application_run(G_APPLICATION(app), argc, argv);
 }
 
 /*

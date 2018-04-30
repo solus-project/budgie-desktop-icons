@@ -7,5 +7,8 @@ main_sources = [
 executable(
     'budgie-desktop-icons',
     sources: main_sources,
+    dependencies: [
+        dep_gtk3,
+    ],
     install: true,
 )
