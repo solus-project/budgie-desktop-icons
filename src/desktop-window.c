@@ -31,7 +31,7 @@ struct _BudgieDesktopWindow {
         GdkMonitor *monitor; /** Our output */
 };
 
-G_DEFINE_TYPE(BudgieDesktopWindow, budgie_desktop_window, GTK_TYPE_APPLICATION_WINDOW)
+G_DEFINE_TYPE(BudgieDesktopWindow, budgie_desktop_window, GTK_TYPE_WINDOW)
 
 enum { PROP_MONITOR = 1, N_PROPS };
 
@@ -77,7 +77,7 @@ static void budgie_desktop_window_get_property(GObject *object, guint id, GValue
 GtkWidget *budgie_desktop_window_new(GdkMonitor *monitor)
 {
         return g_object_new(BUDGIE_TYPE_DESKTOP_WINDOW,
-                            "window-type",
+                            "type",
                             GTK_WINDOW_TOPLEVEL,
                             "monitor",
                             monitor,
@@ -115,6 +115,7 @@ static void budgie_desktop_window_class_init(BudgieDesktopWindowClass *klazz)
                                                             "The GdkMonitor",
                                                             "Corresponding GdkMonitor",
                                                             G_PARAM_CONSTRUCT | G_PARAM_READWRITE);
+        g_object_class_install_properties(obj_class, N_PROPS, obj_properties);
 }
 
 /**

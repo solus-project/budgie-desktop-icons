@@ -14,6 +14,7 @@
 #include "util.h"
 
 #include "desktop-manager.h"
+#include "desktop-window.h"
 
 #include <gtk/gtk.h>
 
@@ -28,7 +29,7 @@ struct _BudgieDesktopManagerClass {
 struct _BudgieDesktopManager {
         GObject parent;
 
-        int __reserved1;
+        GHashTable *windows;
 };
 
 G_DEFINE_TYPE(BudgieDesktopManager, budgie_desktop_manager, G_TYPE_OBJECT)
@@ -55,6 +56,8 @@ static void budgie_desktop_manager_dispose(GObject *obj)
         BudgieDesktopManager *self = NULL;
         self = BUDGIE_DESKTOP_MANAGER(obj);
 
+        g_clear_pointer(&self->windows, g_hash_table_unref);
+
         G_OBJECT_CLASS(budgie_desktop_manager_parent_class)->dispose(obj);
 }
 
@@ -80,6 +83,11 @@ static void budgie_desktop_manager_init(BudgieDesktopManager *self)
 {
         GdkScreen *screen = NULL;
 
+        self->windows = g_hash_table_new_full(g_direct_hash,
+                                              g_direct_equal,
+                                              NULL,
+                                              (GDestroyNotify)gtk_widget_destroy);
+
         screen = gdk_screen_get_default();
         g_signal_connect_swapped(screen,
                                  "monitors-changed",
@@ -97,6 +105,21 @@ static void budgie_desktop_manager_init(BudgieDesktopManager *self)
  */
 static void budgie_desktop_manager_screens_changed(BudgieDesktopManager *self, GdkScreen *screen)
 {
+        GdkDisplay *display = NULL;
+        GdkMonitor *monitor = NULL;
+        GtkWidget *window = NULL;
+
+        /* Clear existing outputs */
+        g_hash_table_remove_all(self->windows);
+
+        /* DEMO: Let's just create a single output here */
+        display = gdk_screen_get_display(screen);
+        monitor = gdk_display_get_primary_monitor(display);
+        window = budgie_desktop_window_new(monitor);
+
+        g_hash_table_insert(self->windows, monitor, window);
+        gtk_widget_show(window);
+
         g_message("Screens changed");
 }
 
