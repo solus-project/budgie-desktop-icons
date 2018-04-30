@@ -113,14 +113,29 @@ static void budgie_desktop_view_demo_code(BudgieDesktopView *self)
         GdkPixbuf *pixbuf = NULL;
 
         theme = gtk_icon_theme_get_default();
-        pixbuf =
-            gtk_icon_theme_load_icon(theme, "folder", 64, GTK_ICON_LOOKUP_GENERIC_FALLBACK, NULL);
-
         model = gtk_list_store_new(2, G_TYPE_STRING, GDK_TYPE_PIXBUF);
-        gtk_icon_view_set_model(GTK_ICON_VIEW(self->icon_view), GTK_TREE_MODEL(model));
+
+        /* Set up Home icon */
+        pixbuf = gtk_icon_theme_load_icon(theme,
+                                          "folder-home",
+                                          64,
+                                          GTK_ICON_LOOKUP_GENERIC_FALLBACK,
+                                          NULL);
 
         gtk_list_store_append(model, &iter);
-        gtk_list_store_set(model, &iter, 0, "I'd be markup :O", 1, pixbuf, -1);
+        gtk_list_store_set(model, &iter, 0, "Home", 1, pixbuf, -1);
+
+        /* Set up Trash icon */
+        pixbuf = gtk_icon_theme_load_icon(theme,
+                                          "user-trash",
+                                          64,
+                                          GTK_ICON_LOOKUP_GENERIC_FALLBACK,
+                                          NULL);
+        gtk_list_store_append(model, &iter);
+        gtk_list_store_set(model, &iter, 0, "Trash", 1, pixbuf, -1);
+
+        /* Set the model */
+        gtk_icon_view_set_model(GTK_ICON_VIEW(self->icon_view), GTK_TREE_MODEL(model));
 }
 
 /*
