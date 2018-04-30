@@ -23,9 +23,14 @@
  */
 #define CSS_DATA                                                                                   \
         "\
-* { \
+iconview.view { \
         background-color: transparent; \
         background-image: none; \
+        text-shadow: 1px 1px alpha(@theme_fg_color, 0.06); \
+} \
+iconview.view:selected { \
+        background-color: @theme_selected_bg_color; \
+        text-shadow: 1px 1px alpha(@theme_fg_color, 0.16); \
 } \
 "
 
