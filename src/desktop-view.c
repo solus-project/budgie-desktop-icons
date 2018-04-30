@@ -90,6 +90,9 @@ static void budgie_desktop_view_init(BudgieDesktopView *self)
 
         /* Set up the icon view */
         self->icon_view = gtk_icon_view_new();
+        gtk_icon_view_set_item_orientation(GTK_ICON_VIEW(self->icon_view),
+                                           GTK_ORIENTATION_VERTICAL);
+
         gtk_icon_view_set_text_column(GTK_ICON_VIEW(self->icon_view), 0);
         gtk_icon_view_set_pixbuf_column(GTK_ICON_VIEW(self->icon_view), 1);
         gtk_icon_view_set_selection_mode(GTK_ICON_VIEW(self->icon_view), GTK_SELECTION_MULTIPLE);
