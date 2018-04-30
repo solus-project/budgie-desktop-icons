@@ -32,7 +32,7 @@ typedef struct _BudgieDesktopWindowClass BudgieDesktopWindowClass;
 /**
  * Construct a new BudgieDesktopWindow
  */
-GtkWidget *budgie_desktop_window_new(void);
+GtkWidget *budgie_desktop_window_new(GdkMonitor *monitor);
 
 GType budgie_desktop_window_get_type(void);
 

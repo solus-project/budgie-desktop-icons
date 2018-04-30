@@ -27,18 +27,61 @@ struct _BudgieDesktopWindowClass {
  */
 struct _BudgieDesktopWindow {
         GtkApplicationWindow parent;
+
+        GdkMonitor *monitor; /** Our output */
 };
 
 G_DEFINE_TYPE(BudgieDesktopWindow, budgie_desktop_window, GTK_TYPE_APPLICATION_WINDOW)
+
+enum { PROP_MONITOR = 1, N_PROPS };
+
+static GParamSpec *obj_properties[N_PROPS] = {
+        NULL,
+};
+
+static void budgie_desktop_window_set_property(GObject *object, guint id, const GValue *value,
+                                               GParamSpec *spec)
+{
+        BudgieDesktopWindow *self = BUDGIE_DESKTOP_WINDOW(object);
+
+        switch (id) {
+        case PROP_MONITOR:
+                self->monitor = g_value_get_pointer(value);
+                break;
+        default:
+                G_OBJECT_WARN_INVALID_PROPERTY_ID(object, id, spec);
+                break;
+        }
+}
+
+static void budgie_desktop_window_get_property(GObject *object, guint id, GValue *value,
+                                               GParamSpec *spec)
+{
+        BudgieDesktopWindow *self = BUDGIE_DESKTOP_WINDOW(object);
+
+        switch (id) {
+        case PROP_MONITOR:
+                g_value_set_pointer(value, self->monitor);
+                break;
+        default:
+                G_OBJECT_WARN_INVALID_PROPERTY_ID(object, id, spec);
+                break;
+        }
+}
 
 /**
  * budgie_desktop_window_new:
  *
  * Construct a new BudgieDesktopWindow object
  */
-GtkWidget *budgie_desktop_window_new()
+GtkWidget *budgie_desktop_window_new(GdkMonitor *monitor)
 {
-        return g_object_new(BUDGIE_TYPE_DESKTOP_WINDOW, "window-type", GTK_WINDOW_TOPLEVEL, NULL);
+        return g_object_new(BUDGIE_TYPE_DESKTOP_WINDOW,
+                            "window-type",
+                            GTK_WINDOW_TOPLEVEL,
+                            "monitor",
+                            monitor,
+                            NULL);
 }
 
 /**
@@ -65,6 +108,13 @@ static void budgie_desktop_window_class_init(BudgieDesktopWindowClass *klazz)
 
         /* gobject vtable hookup */
         obj_class->dispose = budgie_desktop_window_dispose;
+        obj_class->set_property = budgie_desktop_window_set_property;
+        obj_class->get_property = budgie_desktop_window_get_property;
+
+        obj_properties[PROP_MONITOR] = g_param_spec_pointer("monitor",
+                                                            "The GdkMonitor",
+                                                            "Corresponding GdkMonitor",
+                                                            G_PARAM_CONSTRUCT | G_PARAM_READWRITE);
 }
 
 /**
