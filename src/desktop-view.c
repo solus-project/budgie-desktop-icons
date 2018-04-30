@@ -88,9 +88,12 @@ static void budgie_desktop_view_init(BudgieDesktopView *self)
         gtk_widget_set_hexpand(GTK_WIDGET(self), TRUE);
         gtk_widget_set_vexpand(GTK_WIDGET(self), TRUE);
 
+        /* Set up the icon view */
         self->icon_view = gtk_icon_view_new();
         gtk_icon_view_set_text_column(GTK_ICON_VIEW(self->icon_view), 0);
         gtk_icon_view_set_pixbuf_column(GTK_ICON_VIEW(self->icon_view), 1);
+        gtk_icon_view_set_selection_mode(GTK_ICON_VIEW(self->icon_view), GTK_SELECTION_MULTIPLE);
+
         gtk_container_add(GTK_CONTAINER(self), self->icon_view);
 
         /* Go do demo bits */
