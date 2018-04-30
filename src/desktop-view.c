@@ -82,9 +82,7 @@ static void budgie_desktop_view_class_init(BudgieDesktopViewClass *klazz)
  */
 static void budgie_desktop_view_init(BudgieDesktopView *self)
 {
-        /* Protect against future GTK jankery */
-        gtk_event_box_set_visible_window(GTK_EVENT_BOX(self), FALSE);
-        gtk_event_box_set_above_child(GTK_EVENT_BOX(self), FALSE);
+        GtkWidget *box = NULL;
 
         /* TODO: Make properties */
         self->icon_height = 64;
@@ -112,7 +110,9 @@ static void budgie_desktop_view_init(BudgieDesktopView *self)
         gtk_icon_view_set_pixbuf_column(GTK_ICON_VIEW(self->icon_view), 1);
         gtk_icon_view_set_selection_mode(GTK_ICON_VIEW(self->icon_view), GTK_SELECTION_MULTIPLE);
 
-        gtk_container_add(GTK_CONTAINER(self), self->icon_view);
+        box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+        gtk_container_add(GTK_CONTAINER(self), box);
+        gtk_box_pack_start(GTK_BOX(box), self->icon_view, TRUE, TRUE, 0);
 
         /* Go do demo bits */
         budgie_desktop_view_demo_code(self);
