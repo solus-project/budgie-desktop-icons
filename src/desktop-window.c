@@ -100,6 +100,22 @@ static void budgie_desktop_window_dispose(GObject *obj)
 }
 
 /**
+ * Handle constructor specifics for our Window so we can align ourself with
+ * the geometry of the output.
+ */
+static void budgie_desktop_window_constructed(GObject *obj)
+{
+        BudgieDesktopWindow *self = NULL;
+
+        self = BUDGIE_DESKTOP_WINDOW(obj);
+        g_message("New output on %s %s",
+                  gdk_monitor_get_manufacturer(self->monitor),
+                  gdk_monitor_get_model(self->monitor));
+
+        G_OBJECT_CLASS(budgie_desktop_window_parent_class)->constructed(obj);
+}
+
+/**
  * budgie_desktop_window_class_init:
  *
  * Handle class initialisation
@@ -112,6 +128,7 @@ static void budgie_desktop_window_class_init(BudgieDesktopWindowClass *klazz)
         obj_class->dispose = budgie_desktop_window_dispose;
         obj_class->set_property = budgie_desktop_window_set_property;
         obj_class->get_property = budgie_desktop_window_get_property;
+        obj_class->constructed = budgie_desktop_window_constructed;
 
         obj_properties[PROP_MONITOR] = g_param_spec_pointer("monitor",
                                                             "The GdkMonitor",
