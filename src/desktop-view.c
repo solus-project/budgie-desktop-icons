@@ -90,6 +90,13 @@ static void budgie_desktop_view_init(BudgieDesktopView *self)
 
         /* Set up the icon view */
         self->icon_view = gtk_icon_view_new();
+
+        /* Force some initial "sane" sizes */
+        gtk_icon_view_set_columns(GTK_ICON_VIEW(self->icon_view), 1);
+        gtk_icon_view_set_item_width(GTK_ICON_VIEW(self->icon_view), 64);
+        gtk_icon_view_set_row_spacing(GTK_ICON_VIEW(self->icon_view), 8);
+        gtk_icon_view_set_column_spacing(GTK_ICON_VIEW(self->icon_view), 8);
+
         gtk_icon_view_set_item_orientation(GTK_ICON_VIEW(self->icon_view),
                                            GTK_ORIENTATION_VERTICAL);
 
