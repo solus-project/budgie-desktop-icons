@@ -178,6 +178,7 @@ static void budgie_desktop_window_init(BudgieDesktopWindow *self)
         gtk_window_set_skip_taskbar_hint(window, TRUE);
         gtk_window_set_type_hint(window, GDK_WINDOW_TYPE_HINT_DESKTOP);
         gtk_window_set_title(window, "Desktop Window");
+        gtk_window_set_resizable(window, FALSE);
 
         self->view = budgie_desktop_view_new();
         gtk_container_add(GTK_CONTAINER(self), self->view);
