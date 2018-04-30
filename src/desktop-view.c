@@ -27,9 +27,13 @@ struct _BudgieDesktopViewClass {
  */
 struct _BudgieDesktopView {
         GtkEventBox parent;
+
+        GtkWidget *icon_view;
 };
 
 G_DEFINE_TYPE(BudgieDesktopView, budgie_desktop_view, GTK_TYPE_EVENT_BOX)
+
+static void budgie_desktop_view_demo_code(BudgieDesktopView *self);
 
 /**
  * budgie_desktop_view_new:
@@ -83,6 +87,37 @@ static void budgie_desktop_view_init(BudgieDesktopView *self)
         gtk_widget_set_valign(GTK_WIDGET(self), GTK_ALIGN_FILL);
         gtk_widget_set_hexpand(GTK_WIDGET(self), TRUE);
         gtk_widget_set_vexpand(GTK_WIDGET(self), TRUE);
+
+        self->icon_view = gtk_icon_view_new();
+        gtk_icon_view_set_text_column(GTK_ICON_VIEW(self->icon_view), 0);
+        gtk_icon_view_set_pixbuf_column(GTK_ICON_VIEW(self->icon_view), 1);
+        gtk_container_add(GTK_CONTAINER(self), self->icon_view);
+
+        /* Go do demo bits */
+        budgie_desktop_view_demo_code(self);
+}
+
+/**
+ * budgie_desktop_view_demo_code:
+ *
+ * Flesh out some basic demo cruft to get the look & feel right
+ */
+static void budgie_desktop_view_demo_code(BudgieDesktopView *self)
+{
+        GtkListStore *model = NULL;
+        GtkTreeIter iter = { 0 };
+        GtkIconTheme *theme = NULL;
+        GdkPixbuf *pixbuf = NULL;
+
+        theme = gtk_icon_theme_get_default();
+        pixbuf =
+            gtk_icon_theme_load_icon(theme, "folder", 64, GTK_ICON_LOOKUP_GENERIC_FALLBACK, NULL);
+
+        model = gtk_list_store_new(2, G_TYPE_STRING, GDK_TYPE_PIXBUF);
+        gtk_icon_view_set_model(GTK_ICON_VIEW(self->icon_view), GTK_TREE_MODEL(model));
+
+        gtk_list_store_append(model, &iter);
+        gtk_list_store_set(model, &iter, 0, "I'd be markup :O", 1, pixbuf, -1);
 }
 
 /*

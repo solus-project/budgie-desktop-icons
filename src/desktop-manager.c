@@ -118,7 +118,7 @@ static void budgie_desktop_manager_screens_changed(BudgieDesktopManager *self, G
         window = budgie_desktop_window_new(g_application_get_default(), monitor);
 
         g_hash_table_insert(self->windows, monitor, window);
-        gtk_widget_show(window);
+        gtk_widget_show_all(window);
 
         g_message("Screens changed");
 }
