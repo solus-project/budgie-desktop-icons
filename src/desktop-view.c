@@ -29,6 +29,10 @@ struct _BudgieDesktopView {
         GtkEventBox parent;
 
         GtkWidget *icon_view;
+
+        /* Bottom metrics */
+        gint icon_height;
+        gint icon_spacing;
 };
 
 G_DEFINE_TYPE(BudgieDesktopView, budgie_desktop_view, GTK_TYPE_EVENT_BOX)
@@ -82,6 +86,10 @@ static void budgie_desktop_view_init(BudgieDesktopView *self)
         gtk_event_box_set_visible_window(GTK_EVENT_BOX(self), FALSE);
         gtk_event_box_set_above_child(GTK_EVENT_BOX(self), FALSE);
 
+        /* TODO: Make properties */
+        self->icon_height = 64;
+        self->icon_spacing = 8;
+
         /* Force alignment */
         gtk_widget_set_halign(GTK_WIDGET(self), GTK_ALIGN_FILL);
         gtk_widget_set_valign(GTK_WIDGET(self), GTK_ALIGN_FILL);
@@ -93,9 +101,9 @@ static void budgie_desktop_view_init(BudgieDesktopView *self)
 
         /* Force some initial "sane" sizes */
         gtk_icon_view_set_columns(GTK_ICON_VIEW(self->icon_view), 1);
-        gtk_icon_view_set_item_width(GTK_ICON_VIEW(self->icon_view), 64);
-        gtk_icon_view_set_row_spacing(GTK_ICON_VIEW(self->icon_view), 8);
-        gtk_icon_view_set_column_spacing(GTK_ICON_VIEW(self->icon_view), 8);
+        gtk_icon_view_set_item_width(GTK_ICON_VIEW(self->icon_view), self->icon_height);
+        gtk_icon_view_set_row_spacing(GTK_ICON_VIEW(self->icon_view), self->icon_spacing);
+        gtk_icon_view_set_column_spacing(GTK_ICON_VIEW(self->icon_view), self->icon_spacing);
 
         gtk_icon_view_set_item_orientation(GTK_ICON_VIEW(self->icon_view),
                                            GTK_ORIENTATION_VERTICAL);
@@ -128,7 +136,7 @@ static void budgie_desktop_view_demo_code(BudgieDesktopView *self)
         /* Set up Home icon */
         pixbuf = gtk_icon_theme_load_icon(theme,
                                           "folder-home",
-                                          64,
+                                          self->icon_height,
                                           GTK_ICON_LOOKUP_GENERIC_FALLBACK,
                                           NULL);
 
@@ -138,7 +146,7 @@ static void budgie_desktop_view_demo_code(BudgieDesktopView *self)
         /* Set up Trash icon */
         pixbuf = gtk_icon_theme_load_icon(theme,
                                           "user-trash",
-                                          64,
+                                          self->icon_height,
                                           GTK_ICON_LOOKUP_GENERIC_FALLBACK,
                                           NULL);
         gtk_list_store_append(model, &iter);
