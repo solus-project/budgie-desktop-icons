@@ -1,6 +1,7 @@
 # Build our main dummy executable
 
 main_sources = [
+    'desktop-manager.c',
     'main.c',
 ]
 
