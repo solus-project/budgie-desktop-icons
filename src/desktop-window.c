@@ -74,6 +74,13 @@ static void budgie_desktop_window_class_init(BudgieDesktopWindowClass *klazz)
  */
 static void budgie_desktop_window_init(BudgieDesktopWindow *self)
 {
+        GtkWindow *window = GTK_WINDOW(self);
+
+        gtk_window_set_decorated(window, FALSE);
+        gtk_window_set_skip_pager_hint(window, TRUE);
+        gtk_window_set_skip_taskbar_hint(window, TRUE);
+        gtk_window_set_type_hint(window, GDK_WINDOW_TYPE_HINT_DESKTOP);
+        gtk_window_set_title(window, "Desktop Window");
 }
 
 /*
