@@ -125,7 +125,7 @@ static void budgie_desktop_window_constructed(GObject *obj)
                   gdk_monitor_get_model(self->monitor));
 
         /* Resize to available geometry */
-        gdk_monitor_get_geometry(self->monitor, &display_area);
+        gdk_monitor_get_workarea(self->monitor, &display_area);
         gtk_window_move(GTK_WINDOW(self), display_area.x, display_area.y);
         gtk_window_resize(GTK_WINDOW(self), display_area.width, display_area.height);
 
