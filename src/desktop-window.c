@@ -74,9 +74,11 @@ static void budgie_desktop_window_get_property(GObject *object, guint id, GValue
  *
  * Construct a new BudgieDesktopWindow object
  */
-GtkWidget *budgie_desktop_window_new(GdkMonitor *monitor)
+GtkWidget *budgie_desktop_window_new(GApplication *app, GdkMonitor *monitor)
 {
         return g_object_new(BUDGIE_TYPE_DESKTOP_WINDOW,
+                            "application",
+                            app,
                             "type",
                             GTK_WINDOW_TOPLEVEL,
                             "monitor",

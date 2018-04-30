@@ -115,7 +115,7 @@ static void budgie_desktop_manager_screens_changed(BudgieDesktopManager *self, G
         /* DEMO: Let's just create a single output here */
         display = gdk_screen_get_display(screen);
         monitor = gdk_display_get_primary_monitor(display);
-        window = budgie_desktop_window_new(monitor);
+        window = budgie_desktop_window_new(g_application_get_default(), monitor);
 
         g_hash_table_insert(self->windows, monitor, window);
         gtk_widget_show(window);
