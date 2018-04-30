@@ -18,6 +18,17 @@
 
 #include <gtk/gtk.h>
 
+/**
+ * TODO: Provide less shitty CSS.
+ */
+#define CSS_DATA                                                                                   \
+        "\
+* { \
+        background-color: transparent; \
+        background-image: none; \
+} \
+"
+
 struct _BudgieDesktopManagerClass {
         GObjectClass parent_class;
 };
@@ -35,6 +46,7 @@ struct _BudgieDesktopManager {
 G_DEFINE_TYPE(BudgieDesktopManager, budgie_desktop_manager, G_TYPE_OBJECT)
 
 static void budgie_desktop_manager_screens_changed(BudgieDesktopManager *self, GdkScreen *screen);
+static void budgie_desktop_manager_init_css(void);
 
 /**
  * budgie_desktop_manager_new:
@@ -94,8 +106,29 @@ static void budgie_desktop_manager_init(BudgieDesktopManager *self)
                                  G_CALLBACK(budgie_desktop_manager_screens_changed),
                                  self);
 
+        /* Fix styling */
+        budgie_desktop_manager_init_css();
+
         /* Fire off the initial change event now */
         budgie_desktop_manager_screens_changed(self, screen);
+}
+
+/**
+ * budgie_desktop_manager_init_css:
+ *
+ * Bootstrap necessary CSS data
+ */
+static void budgie_desktop_manager_init_css(void)
+{
+        GtkCssProvider *provider = NULL;
+        GdkScreen *screen = NULL;
+
+        provider = gtk_css_provider_new();
+        gtk_css_provider_load_from_data(provider, CSS_DATA, strlen(CSS_DATA), NULL);
+        screen = gdk_screen_get_default();
+        gtk_style_context_add_provider_for_screen(screen,
+                                                  GTK_STYLE_PROVIDER(provider),
+                                                  GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 }
 
 /**
