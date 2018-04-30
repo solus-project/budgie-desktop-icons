@@ -106,11 +106,16 @@ static void budgie_desktop_window_dispose(GObject *obj)
 static void budgie_desktop_window_constructed(GObject *obj)
 {
         BudgieDesktopWindow *self = NULL;
+        GdkRectangle display_area = { 0 };
 
         self = BUDGIE_DESKTOP_WINDOW(obj);
         g_message("New output on %s %s",
                   gdk_monitor_get_manufacturer(self->monitor),
                   gdk_monitor_get_model(self->monitor));
+
+        gdk_monitor_get_geometry(self->monitor, &display_area);
+        gtk_window_move(GTK_WINDOW(self), display_area.x, display_area.y);
+        gtk_window_resize(GTK_WINDOW(self), display_area.width, display_area.height);
 
         G_OBJECT_CLASS(budgie_desktop_window_parent_class)->constructed(obj);
 }
